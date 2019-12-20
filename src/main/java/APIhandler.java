@@ -36,6 +36,9 @@ public class APIhandler {
         //http://api.openweathermap.org/data/2.5/weather?id=2825297&APPID=bb4ce93b554eb1474eb6d652eb1a85ae&units=metric <-- Example Url for API call current data
 
         try{
+            if(cityID==-1){
+                return new URL(""); //returning an empty URL
+            }
             StringBuilder apiCall = new StringBuilder();
             String apiUrlForecast = "http://api.openweathermap.org/data/2.5/forecast";
             String apiUrlCurrentData = "http://api.openweathermap.org/data/2.5/weather";

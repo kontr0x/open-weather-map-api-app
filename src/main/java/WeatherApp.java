@@ -9,6 +9,7 @@ public class WeatherApp {
     public static void main(String[] args) throws IOException, ParseException {
         Scanner userInput1 = new Scanner(System.in);
         int cityID = -1;
+        boolean foundMatch = true;
         System.out.printf("Type in city name > ");
         String input = userInput1.next();
         System.out.println();
@@ -23,10 +24,13 @@ public class WeatherApp {
             }
         }else{
             System.out.println("No match found");
+            foundMatch=false;
         }
         userInput1.close();
 
-        JSONObject apiJSON = APIhandler.fetchAPIData(APIhandler.GenerateAPIurl(cityID));
-        System.out.println("\nCurrent temperature in "+input+" : "+((JSONObject) apiJSON.get("main")).get("temp")+"°");
+        if(foundMatch){
+            JSONObject apiJSON = APIhandler.fetchAPIData(APIhandler.GenerateAPIurl(cityID));
+            System.out.println("\nCurrent temperature in "+input+" : "+((JSONObject) apiJSON.get("main")).get("temp")+"°");
+        }
     }
 }
