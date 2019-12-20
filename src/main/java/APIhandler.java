@@ -43,7 +43,7 @@ public class APIhandler {
             String apiUrlForecast = "http://api.openweathermap.org/data/2.5/forecast";
             String apiUrlCurrentData = "http://api.openweathermap.org/data/2.5/weather";
             String apiKey = "bb4ce93b554eb1474eb6d652eb1a85ae";
-            apiCall.append(apiUrlCurrentData);
+            apiCall.append(apiUrlForecast);
             apiCall.append("?id="+cityID);
             apiCall.append("&APPID="+apiKey);
             apiCall.append("&units=metric");
