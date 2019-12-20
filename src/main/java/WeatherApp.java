@@ -27,7 +27,6 @@ public class WeatherApp {
         userInput1.close();
 
         JSONObject apiJSON = APIhandler.fetchAPIData(APIhandler.GenerateAPIurl(cityID));
-
         System.out.println("\nCurrent temperature in "+input+" : "+((JSONObject) apiJSON.get("main")).get("temp")+"°");
     }
 }

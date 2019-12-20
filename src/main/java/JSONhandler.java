@@ -12,7 +12,9 @@ public class JSONhandler {
             Object objJSON = new JSONParser().parse(new FileReader(fileName)); //parsing the read file thought the filereader as an JSON format and get stored as an object temporally
             return (JSONArray) objJSON; //returning the fully scanned JSON file as an JSON array this is caused thought the format of the city list
         }catch(FileNotFoundException e){
-            System.out.println("ERROR : File not found");
+            System.out.println("ERROR : file not found");
+        }catch (NullPointerException e){
+            System.out.println("ERROR : file is null");
         }
         return null; //returning null if exception appeared
     }
