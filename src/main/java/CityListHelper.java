@@ -32,7 +32,6 @@ public class CityListHelper {
         System.out.printf("\nPlease select > ");
         try{ //try to select the selected entry from the user
             int selection = userSelection.nextInt();
-            System.out.println("\n"+citys.get(selection).get("name")+" has ID : "+citys.get(selection).get("id"));
             return Integer.parseInt(citys.get(selection).get("id").toString()); //returning the ID of the selected city to use it later on for the api call
         }catch (InputMismatchException e){
             System.out.println("\nYour selection wasn't a number");
