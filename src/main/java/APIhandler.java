@@ -1,3 +1,4 @@
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -5,9 +6,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class APIhandler {
+
     public static JSONObject fetchAPIData(URL url){
         try {
             HttpURLConnection apiConn = (HttpURLConnection)url.openConnection();
@@ -54,5 +60,53 @@ public class APIhandler {
             System.out.println("An error occurred");
         }
         return new URL(""); //returning an empty URL
+    }
+    public static void printForecast(JSONObject apiDATA) throws ParseException {
+        System.out.printf("Weather in %s\n",((JSONObject)apiDATA.get("city")).get("name"));
+        String date = "";
+        JSONArray dataArrayFromApi = (JSONArray)apiDATA.get("list");
+        for (Object jsonOBJ : dataArrayFromApi) {
+            if(jsonOBJ instanceof JSONObject){
+                if(!date.equals(((JSONObject) jsonOBJ).get("dt_txt").toString().split("\\s+")[0])){
+                    System.out.println("\n"+getWeekday((JSONObject) jsonOBJ)+" "+getFormatDate((JSONObject) jsonOBJ));
+                    date = ((JSONObject) jsonOBJ).get("dt_txt").toString().split("\\s+")[0];
+                }
+                System.out.printf("\t%s %6s %s\n",getTime((JSONObject) jsonOBJ),getTemp((JSONObject) jsonOBJ)[0],getWeatherCondition((JSONObject) jsonOBJ));
+            }
+        }
+    }
+    private static String getWeekday(JSONObject currentDay) throws ParseException {
+        String inputDate = currentDay.get("dt_txt").toString().split("\\s+")[0];
+        SimpleDateFormat formatDay = new SimpleDateFormat("yyyy-MM-dd");
+        Date dateDay = formatDay.parse(inputDate);;
+        DateFormat formatDaySimple=new SimpleDateFormat("EEEE");
+        return formatDaySimple.format(dateDay);
+    }
+    private static String getFormatDate(JSONObject currentDay){
+        StringBuilder formatDate = new StringBuilder();
+        formatDate.append(currentDay.get("dt_txt").toString().split("\\s+")[0].split("-")[2]);
+        formatDate.append(".");
+        formatDate.append(currentDay.get("dt_txt").toString().split("\\s+")[0].split("-")[1]);
+        return (formatDate.toString());
+    }
+    private static String getTime(JSONObject currentDay){
+        StringBuilder time = new StringBuilder();
+        time.append(currentDay.get("dt_txt").toString().split("\\s+")[1].split(":")[0]);
+        time.append(":");
+        time.append(currentDay.get("dt_txt").toString().split("\\s+")[1].split(":")[1]);
+        time.append(":");
+        return (time.toString());
+    }
+    private static String[] getTemp(JSONObject currentDay){
+        String[] temps = new String[4];
+        temps[0]=((JSONObject) currentDay.get("main")).get("temp")+"°C";
+        temps[1]=((JSONObject) currentDay.get("main")).get("feels_like")+"°C";
+        temps[2]=((JSONObject) currentDay.get("main")).get("temp_min")+"°C";
+        temps[3]=((JSONObject) currentDay.get("main")).get("temp_max")+"°C";
+        return temps;
+    }
+    private static String getWeatherCondition(JSONObject currentDay){
+        JSONArray weatherArray = (JSONArray)currentDay.get("weather");
+        return ((JSONObject) weatherArray.get(0)).get("description").toString();
     }
 }

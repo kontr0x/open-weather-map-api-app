@@ -35,13 +35,18 @@ public class CityListHelper {
         try{
             if(citys.size()!=0){
                 try{
-                    Scanner userSelection = new Scanner(System.in);
-                    for (int i = 1;i<=citys.size();i++){ //printing all found entry's in the city list
-                        System.out.println(i+") "+citys.get(i).get("country")+", "+citys.get(i).get("name"));;
+                    if(citys.size()>1){
+                        Scanner userSelection = new Scanner(System.in);
+                        for (int i = 1;i<=citys.size();i++){ //printing all found entry's in the city list
+                            System.out.println(i+") "+citys.get(i).get("country")+", "+citys.get(i).get("name"));;
+                        }
+                        System.out.printf("\nPlease select > ");
+                        int selection = userSelection.nextInt();
+                        System.out.println();
+                        return Integer.parseInt(citys.get(selection).get("id").toString()); //returning the ID of the selected city to use it later on for the api call
+                    }else{
+                        return Integer.parseInt(citys.get(1).get("id").toString()); //returning the ID if only one entry is in the hashmap
                     }
-                    System.out.printf("\nPlease select > ");
-                    int selection = userSelection.nextInt();
-                    return Integer.parseInt(citys.get(selection).get("id").toString()); //returning the ID of the selected city to use it later on for the api call
                 }catch (InputMismatchException e){
                     System.out.println("\nYour selection wasn't a number");
                 }catch (NullPointerException e){
@@ -51,6 +56,7 @@ public class CityListHelper {
                 }
                 return -1; //returning the value -1 because it isn't a valid ID so it's easy to trace back as an error that occurred
             }else{
+                System.out.println("No match found");
                 return -1; //returning the value -1 because it isn't a valid ID so it's easy to trace back as an error that occurred
             }
         }catch (NullPointerException e){
