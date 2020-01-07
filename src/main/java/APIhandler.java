@@ -53,6 +53,7 @@ public class APIhandler {
             apiCall.append("?id="+cityID);
             apiCall.append("&APPID="+apiKey);
             apiCall.append("&units=metric");
+            apiCall.append("&lang=de");
             return new URL(apiCall.toString());
         }catch(NullPointerException e){
             System.out.println("Object is null");
@@ -62,7 +63,7 @@ public class APIhandler {
         return new URL(""); //returning an empty URL
     }
     public static void printForecast(JSONObject apiDATA) throws ParseException {
-        System.out.printf("Weather in %s\n",((JSONObject)apiDATA.get("city")).get("name"));
+        System.out.printf("Wetter in %s\n",((JSONObject)apiDATA.get("city")).get("name"));
         String date = "";
         JSONArray dataArrayFromApi = (JSONArray)apiDATA.get("list");
         for (Object jsonOBJ : dataArrayFromApi) {
@@ -78,8 +79,24 @@ public class APIhandler {
     private static String getWeekday(JSONObject currentDay) throws ParseException {
         String inputDate = currentDay.get("dt_txt").toString().split("\\s+")[0];
         SimpleDateFormat formatDay = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateDay = formatDay.parse(inputDate);;
+        Date dateDay = formatDay.parse(inputDate);
         DateFormat formatDaySimple=new SimpleDateFormat("EEEE");
+        switch(formatDaySimple.format(dateDay)){
+            case "Monday":
+                return "Montag";
+            case "Tuesday":
+                return "Dienstag";
+            case "Wednesday":
+                return "Mittwoch";
+            case "Thursday":
+                return "Donnerstag";
+            case "Friday":
+                return "Freitag";
+            case "Saturday":
+                return "Samstag";
+            case "Sunday":
+                return "Sonntag";
+        }
         return formatDaySimple.format(dateDay);
     }
     private static String getFormatDate(JSONObject currentDay){
