@@ -8,7 +8,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class CityListHelper {
-    public static HashMap<Integer, JSONObject> findEntrys(String filter, String fileName) throws IOException, ParseException {
+    public static HashMap<Integer, JSONObject> findEntrys(String filter, String fileName){
         try{
             JSONArray cityJSON = JSONhandler.loadJSON(fileName); //calling the loadJSON function to load the city list, self enplaning ..
             if(cityJSON!=null){ //checking the cityJSON hashmap in case an error occurred and the the return value from loadJSON is NULL

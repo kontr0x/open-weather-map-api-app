@@ -9,6 +9,8 @@
         <module name="open-weather-map-api-app" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel>
+      <module name="open-weather-map-api-app" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

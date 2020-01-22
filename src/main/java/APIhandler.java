@@ -36,7 +36,7 @@ public class APIhandler {
         }
         return null;
     }
-    public static URL GenerateAPIurl(int cityID) throws MalformedURLException {
+    public static URL GenerateAPIurl(int cityID){
 
         //http://api.openweathermap.org/data/2.5/forecast?id=2825297&APPID=bb4ce93b554eb1474eb6d652eb1a85ae&units=metric <-- Example Url for API call forecast
         //http://api.openweathermap.org/data/2.5/weather?id=2825297&APPID=bb4ce93b554eb1474eb6d652eb1a85ae&units=metric <-- Example Url for API call current data
@@ -60,26 +60,35 @@ public class APIhandler {
         }catch (Exception e){
             System.out.println("An error occurred");
         }
-        return new URL(""); //returning an empty URL
+        return null; //returning an empty URL
     }
-    public static void printForecast(JSONObject apiDATA) throws ParseException {
-        System.out.printf("Wetter in %s\n",((JSONObject)apiDATA.get("city")).get("name"));
-        String date = "";
-        JSONArray dataArrayFromApi = (JSONArray)apiDATA.get("list");
-        for (Object jsonOBJ : dataArrayFromApi) {
-            if(jsonOBJ instanceof JSONObject){
-                if(!date.equals(((JSONObject) jsonOBJ).get("dt_txt").toString().split("\\s+")[0])){
-                    System.out.println("\n"+getWeekday((JSONObject) jsonOBJ)+" "+getFormatDate((JSONObject) jsonOBJ));
-                    date = ((JSONObject) jsonOBJ).get("dt_txt").toString().split("\\s+")[0];
+    public static void printForecast(JSONObject apiDATA){
+        try{
+            System.out.printf("Wetter in %s\n",((JSONObject)apiDATA.get("city")).get("name"));
+            String date = "";
+            JSONArray dataArrayFromApi = (JSONArray)apiDATA.get("list");
+            for (Object jsonOBJ : dataArrayFromApi) {
+                if(jsonOBJ instanceof JSONObject){
+                    if(!date.equals(((JSONObject) jsonOBJ).get("dt_txt").toString().split("\\s+")[0])){
+                        System.out.println("\n"+getWeekday((JSONObject) jsonOBJ)+" "+getFormatDate((JSONObject) jsonOBJ));
+                        date = ((JSONObject) jsonOBJ).get("dt_txt").toString().split("\\s+")[0];
+                    }
+                    System.out.printf("\t%s %6s %s\n",getTime((JSONObject) jsonOBJ),getTemp((JSONObject) jsonOBJ)[0],getWeatherCondition((JSONObject) jsonOBJ));
                 }
-                System.out.printf("\t%s %6s %s\n",getTime((JSONObject) jsonOBJ),getTemp((JSONObject) jsonOBJ)[0],getWeatherCondition((JSONObject) jsonOBJ));
             }
+        }catch (Exception e){
+            System.err.println("Fetched data is null");
         }
     }
-    private static String getWeekday(JSONObject currentDay) throws ParseException {
+    private static String getWeekday(JSONObject currentDay){
         String inputDate = currentDay.get("dt_txt").toString().split("\\s+")[0];
         SimpleDateFormat formatDay = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateDay = formatDay.parse(inputDate);
+        Date dateDay;
+        try{
+            dateDay = formatDay.parse(inputDate);
+        }catch (ParseException e){
+            dateDay = new Date();
+        }
         DateFormat formatDaySimple=new SimpleDateFormat("EEEE");
         switch(formatDaySimple.format(dateDay)){
             case "Monday":

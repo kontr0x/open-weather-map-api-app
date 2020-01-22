@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class WeatherApp {
-    public static void main(String[] args) throws IOException, ParseException, java.text.ParseException {
+    public static void main(String[] args){
         String city;
         int cityID;
         Scanner userInput1 = new Scanner(System.in);
@@ -26,7 +26,8 @@ public class WeatherApp {
 
         if(cityID>-1){
             JSONObject apiJSON = APIhandler.fetchAPIData(APIhandler.GenerateAPIurl(cityID));
-            APIhandler.printForecast(apiJSON);
+            if(apiJSON!=null)
+                APIhandler.printForecast(apiJSON);
         }
     }
 }
